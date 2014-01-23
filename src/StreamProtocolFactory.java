@@ -2,6 +2,6 @@
 
 import java.net.Socket;
 
-public interface ProtocolFactory {
+public interface StreamProtocolFactory {
   public Runnable createProtocol(Socket clntSock);
 }
