@@ -1,7 +1,6 @@
 
 
 import java.io.IOException;
-import java.net.ServerSocket;
 
 /**
  * @author Michael J.Donahoo, Kenneth L.Calvert
@@ -21,30 +20,17 @@ public class ServerInitializer {
      */
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 3)
-            throw new IllegalArgumentException("Parameter(s): [<Optional properties>]"
-                    + " <Port> <Protocol> <Dispatcher>");
-
-        int servPort = Integer.parseInt(args[0]);
-        String protocolName = args[1];
-        String dispatcherName = args[2];
+        int servPort = 5000;
 
         ServerInitializer serverInitializer = new ServerInitializer();
-        serverInitializer.initializeServer(servPort, protocolName, dispatcherName);
+        serverInitializer.initializeServer(servPort);
     }
 
-    public void initializeServer(int servPort, String protocolName, String dispatcherName)
-            throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
-
-        ServerSocket servSock = new ServerSocket(servPort);
-        Logger logger = new ConsoleLogger();
-
-        ProtocolFactory protoFactory = (ProtocolFactory)
-                Class.forName(protocolName + "ProtocolFactory").newInstance();
-
-        Dispatcher dispatcher = (Dispatcher)
-                Class.forName(dispatcherName + "Dispatcher").newInstance();
-
-        dispatcher.startDispatching(servSock, logger, protoFactory);
+    public void initializeServer(int servPort) throws IOException {
+    	System.out.println("Server ON");
+        Dispatcher dispatcher = new Dispatcher(servPort);
+        while (true) {
+        	dispatcher.select();
+        }
     }
 }
