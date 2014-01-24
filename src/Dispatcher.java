@@ -7,7 +7,7 @@ import java.net.Socket;
 
 /**
  * @brief 이벤트를 디코딩하여 적절한 핸들러에 전달한다.
- * @details 이벤트가 발생하면 header와 data 부분으로 나눈다. 이중 header는 적절한 handler를 찾는데 쓰이고, data는 handler에 전달한다.
+ * @details 이벤트가 발생하면 header를 읽어들여 적절한 Protocol을 찾아 실행시킨다.
  */
 public class Dispatcher {
     private ServerSocket serverSocket;
@@ -25,12 +25,11 @@ public class Dispatcher {
 
     /**
      * @brief 이벤트 발생시 Demultiplex 한다.
-     * @details 이벤트 발생시, header와 data로 나눈다. 이중 header는 적절한 handler를 찾는데 쓰이고, data는 handler에 전달한다.
-     * @param handlers Reactor에 등록된 핸들맵 객체.
+     * @details 이벤트 발생시 헤더부분만큼을 읽어 각 헤더에 맞는 Protocol을 실행시킨다.
      * @return Nothing
      * @throws IOException IOException 발생시 던진다.
      */
-    public void select() throws IOException {
+    public void demultiplex() throws IOException {
         Socket socket = serverSocket.accept();
         InputStream inputStream = socket.getInputStream();
 

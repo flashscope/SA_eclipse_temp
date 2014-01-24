@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<handlers>
-  <handler>server.event_handler.SayHelloEventHandler</handler>
-  <handler>server.event_handler.UpdateProfileEventHandler</handler>
-</handlers> 
