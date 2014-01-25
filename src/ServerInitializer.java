@@ -23,7 +23,11 @@ public class ServerInitializer {
     public void initializeServer(int servPort) throws IOException {
     	System.out.println("Server ON");
     	
-        Dispatcher dispatcher = new Dispatcher(servPort);
-        dispatcher.startDispatch();
+    	Reactor reactor = new Reactor(servPort);
+
+        reactor.registerHandler(new StreamSayHelloEventHandler());
+        reactor.registerHandler(new StreamUpdateProfileEventHandler());
+
+        reactor.handle_events();
     }
 }
