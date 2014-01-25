@@ -11,7 +11,7 @@ import java.net.Socket;
  */
 public class Dispatcher {
     private ServerSocket serverSocket;
-    private final int HEADER_SIZE = 6;
+
 
     /**
      * @brief 생성자.
@@ -22,35 +22,15 @@ public class Dispatcher {
     public Dispatcher(int servPort) throws IOException {
         serverSocket = new ServerSocket(servPort);
     }
-
-    /**
-     * @brief 이벤트 발생시 Demultiplex 한다.
-     * @details 이벤트 발생시 헤더부분만큼을 읽어 각 헤더에 맞는 Protocol을 실행시킨다.
-     * @return Nothing
-     * @throws IOException IOException 발생시 던진다.
-     */
-    public void demultiplex() throws IOException {
-        Socket socket = serverSocket.accept();
-        InputStream inputStream = socket.getInputStream();
-
-        byte[] buffer = new byte[HEADER_SIZE];
-        inputStream.read(buffer);
-        String header = new String(buffer);
-        
-        Runnable protocol;
-        Thread thread;
-        switch (header) {
-        case "0x5001":
-        	protocol = new StreamSayHelloProtocol(socket);
-            thread = new Thread(protocol);
-            thread.start();
-        	break;
-        case "0x6001":
-        	protocol = new StreamUpdateProfileProtocol(socket);
-            thread = new Thread(protocol);
-            thread.start();
-        	break;
-        }
+    
+    public void startDispatch() throws IOException {
+    	while (true) {
+        	Socket socket = serverSocket.accept();
+        	Runnable demultiplexer = new Demultiplexer(socket);
+        	Thread thread = new Thread(demultiplexer);
+        	thread.start();
+    	}
     }
+
 }
 

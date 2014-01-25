@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 
-public class StreamSayHelloProtocol implements Runnable {
+public class StreamSayHelloProtocol implements ProtocolFactory {
     private static final int DATA_SIZE = 512;
     private static final int TOKEN_NUM = 2;
     
@@ -21,8 +21,7 @@ public class StreamSayHelloProtocol implements Runnable {
         this.clntSock = clntSock;
     }
     
-	@Override
-	public void run() {
+	public void readData() {
 		InputStream data;
 		try {
 			data = clntSock.getInputStream();
