@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.StringTokenizer;
@@ -37,6 +38,8 @@ public class StreamSayHelloEventHandler implements EventHandler {
 	            i++;
 	        }
 	        sayHello(params);
+	        messageByteBuffer.clear();
+	        
 		} catch (InterruptedException | ExecutionException
 				| TimeoutException e) {
 			// TODO Auto-generated catch block
